@@ -1,17 +1,17 @@
 {
-    "name": "vencord",
-    "version": "1.15.17",
+    "name": "marcord",
+    "version": "1.0.0",
     "private": "true",
-    "description": "The cutest Discord client mod",
-    "homepage": "https://github.com/Vendicated/Vencord#readme",
+    "description": "Discord client modification tailored for macOS and custom modding",
+    "homepage": "https://github.com/originels/Marcord#readme",
     "bugs": {
-        "url": "https://github.com/Vendicated/Vencord/issues"
+        "url": "https://github.com/originels/Marcord/issues"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Vendicated",
+    "author": "Marcord Team",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Vendicated/Vencord.git"
+        "url": "git+https://github.com/originels/Marcord.git"
     },
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
@@ -27,6 +27,12 @@
         "generateTypes": "tspc --emitDeclarationOnly --declaration --outDir packages/vencord-types --allowJs false",
         "inject": "node scripts/runInstaller.mjs -- --install",
         "uninject": "node scripts/runInstaller.mjs -- --uninstall",
+        "inject:canary": "node scripts/runInstaller.mjs -- --install --branch canary",
+        "uninject:canary": "node scripts/runInstaller.mjs -- --uninstall --branch canary",
+        "start:discord": "open -a Discord",
+        "start:canary": "open -a 'Discord Canary'",
+        "restart:discord": "killall Discord 2>/dev/null; sleep 1; open -a Discord",
+        "restart:canary": "killall 'Discord Canary' 2>/dev/null; sleep 1; open -a 'Discord Canary'",
         "lint": "oxlint",
         "fmt": "oxfmt \"**/*.{css,html,json,yml,yaml}\"",
         "fmt:check": "pnpm fmt --check",

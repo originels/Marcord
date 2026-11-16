@@ -30,8 +30,11 @@ import { installExt } from "./utils/extensions";
 
 if (IS_VESKTOP || !IS_VANILLA) {
     app.whenReady().then(() => {
-        protocol.handle("vencord", ({ url: unsafeUrl }) => {
-            let url = decodeURI(unsafeUrl).slice("vencord://".length).replace(/\?v=\d+$/, "");
+        const handleCustomProtocol = ({ url: unsafeUrl }: { url: string; }) => {
+            let url = decodeURI(unsafeUrl)
+                .replace(/^marcord:\/\//, "")
+                .replace(/^vencord:\/\//, "")
+                .replace(/\?v=\d+$/, "");
 
             if (url.endsWith("/")) url = url.slice(0, -1);
 
@@ -64,7 +67,10 @@ if (IS_VESKTOP || !IS_VANILLA) {
                         status: 404
                     });
             }
-        });
+        };
+
+        protocol.handle("marcord", handleCustomProtocol);
+        protocol.handle("vencord", handleCustomProtocol);
 
         try {
             if (RendererSettings.store.enableReactDevtools)

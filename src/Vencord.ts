@@ -178,6 +178,11 @@ initStyles();
 startAllPlugins(StartAt.Init);
 init();
 
+try {
+    const glob = typeof window !== "undefined" ? window : globalThis;
+    (glob as any).Marcord = (glob as any).Vencord;
+} catch {}
+
 document.addEventListener("DOMContentLoaded", () => {
     startAllPlugins(StartAt.DOMContentLoaded);
 

@@ -32,6 +32,7 @@ if (location.href === DESKTOP_MONACO_EDITOR_URL) {
 // Discord
 else {
     contextBridge.exposeInMainWorld("VencordNative", VencordNative);
+    contextBridge.exposeInMainWorld("MarcordNative", VencordNative);
     invoke(IpcEvents.INIT_FILE_WATCHERS);
 
     if (IS_DISCORD_DESKTOP) {

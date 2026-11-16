@@ -58,12 +58,8 @@ let DonorBadges = {} as Record<string, Array<DonorBadge>>;
 let DirectoryBadges = {} as Record<string, DirectoryBadge>;
 
 async function loadBadges(noCache = false) {
-    const init = {} as RequestInit;
-    if (noCache)
-        init.cache = "no-cache";
-
-    DonorBadges = await fetch("https://badges.vencord.dev/badges.json", init)
-        .then(r => r.json());
+    // Disabled external badge fetching from vencord.dev for privacy (Marcord)
+    DonorBadges = {};
 }
 
 let intervalId: any;

@@ -181,83 +181,34 @@ export default definePlugin({
 
     commands: [
         {
+            name: "marcord-debug",
+            description: "Send Marcord debug info",
+            predicate: () => true,
+            execute: async () => ({ content: await generateDebugInfoMessage() })
+        },
+        {
+            name: "marcord-plugins",
+            description: "Send Marcord plugin list",
+            predicate: () => true,
+            execute: () => ({ content: generatePluginList() })
+        },
+        {
             name: "vencord-debug",
-            description: "Send Vencord debug info",
-            predicate: ctx => isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel),
+            description: "Send Marcord debug info (alias)",
+            predicate: () => true,
             execute: async () => ({ content: await generateDebugInfoMessage() })
         },
         {
             name: "vencord-plugins",
-            description: "Send Vencord plugin list",
-            predicate: ctx => isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel),
+            description: "Send Marcord plugin list (alias)",
+            predicate: () => true,
             execute: () => ({ content: generatePluginList() })
         }
     ],
 
     flux: {
-        async CHANNEL_SELECT({ channelId }) {
-            const isSupportChannel = channelId === SUPPORT_CHANNEL_ID || ChannelStore.getChannel(channelId)?.parent_id === SUPPORT_CATEGORY_ID;
-            if (!isSupportChannel) return;
-
-            const selfId = UserStore.getCurrentUser()?.id;
-            if (!selfId || isPluginDev(selfId)) return;
-
-            if (!IS_UPDATER_DISABLED) {
-                await checkForUpdatesOnce().catch(() => { });
-
-                if (isOutdated) {
-                    openModal(props => (
-                        <ConfirmModal
-                            {...props}
-                            variant="primary"
-                            title="Hold on!"
-                            confirmText="Update & Restart Now"
-                            cancelText="View Updates"
-                            onConfirm={forceUpdate}
-                            onCancel={() => openSettingsTabModal(UpdaterTab!)}
-                        >
-                            <div>
-                                <Paragraph>You are using an outdated version of Vencord! Chances are, your issue is already fixed.</Paragraph>
-                                <Paragraph className={Margins.top8}>
-                                    Please first update before asking for support!
-                                </Paragraph>
-                                <Paragraph className={Margins.top8}>
-                                    If you know what you're doing or cannot update, you can dismiss this prompt.
-                                </Paragraph>
-                            </div>
-                        </ConfirmModal>
-                    ));
-                    return;
-                }
-            }
-
-            const roles = GuildMemberStore.getSelfMember(VENCORD_GUILD_ID)?.roles;
-            if (!roles || TrustedRolesIds.some(id => roles.includes(id))) return;
-
-            if (!IS_WEB && IS_UPDATER_DISABLED) {
-                openModal(props => (
-                    <ConfirmModal
-                        {...props}
-                        title="Hold on!"
-                        confirmText="OK"
-                        variant="primary"
-                    >
-                        <div>
-                            <Paragraph>You are using an externally updated Vencord version, which we do not provide support for!</Paragraph>
-                            <Paragraph className={Margins.top8}>
-                                Please either switch to an <Link href="https://vencord.dev/download">officially supported version of Vencord</Link>, or
-                                contact your package maintainer for support instead.
-                            </Paragraph>
-                        </div>
-                    </ConfirmModal>
-                ));
-                return;
-            }
-
-            if (!IS_STANDALONE && !settings.store.dismissedDevBuildWarning) {
-                openModal(props => <DevBuildConfirmModal {...props} />);
-                return;
-            }
+        async CHANNEL_SELECT() {
+            // Disabled support guild warnings for Marcord
         }
     },
 

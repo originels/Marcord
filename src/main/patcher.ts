@@ -23,7 +23,7 @@ import { dirname, join } from "path";
 import { RendererSettings } from "./settings";
 import { IS_VANILLA } from "./utils/constants";
 
-console.log("[Vencord] Starting up...");
+console.log("[Marcord] Starting up...");
 
 // Our injector file at app/index.js
 const injectorPath = require.main!.filename;
@@ -131,10 +131,10 @@ if (!IS_VANILLA) {
         s.set("DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING", true);
     });
 
-    process.env.DATA_DIR = join(app.getPath("userData"), "..", "Vencord");
+    process.env.DATA_DIR = join(app.getPath("userData"), "..", "Marcord");
 } else {
-    console.log("[Vencord] Running in vanilla mode. Not loading Vencord");
+    console.log("[Marcord] Running in vanilla mode. Not loading Marcord");
 }
 
-console.log("[Vencord] Loading original Discord app.asar");
+console.log("[Marcord] Loading original Discord app.asar");
 require(require.main!.filename);
