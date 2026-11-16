@@ -92,6 +92,25 @@ console.log("Now running Installer...");
 const argStart = process.argv.indexOf("--");
 const args = argStart === -1 ? [] : process.argv.slice(argStart + 1);
 
+if (process.platform === "darwin" && !args.includes("-location") && !args.includes("--location")) {
+    const isCanary = args.some(a => a.toLowerCase().includes("canary"));
+    const appName = isCanary ? "Discord Canary.app" : "Discord.app";
+    const userApp = join(process.env.HOME, "Applications", appName);
+    if (existsSync(userApp)) {
+        // -branch / --branch and -location are mutually exclusive
+        let filteredArgs = [];
+        for (let i = 0; i < args.length; i++) {
+            if (args[i] === "-branch" || args[i] === "--branch") {
+                i++; // skip next arg (branch name)
+            } else {
+                filteredArgs.push(args[i]);
+            }
+        }
+        args.length = 0;
+        args.push(...filteredArgs, "-location", userApp);
+    }
+}
+
 try {
     execFileSync(installerBin, args, {
         stdio: "inherit",
